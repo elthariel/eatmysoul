@@ -46,7 +46,7 @@ class Settings
     @options = {
       :server => "ns-server.epita.fr",
       :port => 4242,
-      :daemon => "false",
+      :daemon => false,
       :login => "login_x",
       :passwd => "pwd_socks",
       :logfile => "STDOUT",
@@ -232,6 +232,7 @@ def monitor(o)
     if ($active_connection.last_ping - Time.now) > 700
       o.logger.warn "Connection seems inactive, restarting ..."
       EM::stop_event_loop
+      connect_loop o
     end
   end
 end
@@ -239,6 +240,6 @@ end
 o = Settings.new ARGV[0] if ARGV.length >= 1
 o = Settings.new unless ARGV.length >= 1
 
-#Process.daemon if o.daemon
+Process.daemon if o.daemon == "true" or o.daemon == "yes"
 Signal.trap("PIPE") { connect_loop o }
 connect_loop(o)

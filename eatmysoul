@@ -32,7 +32,6 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 
-require 'rubygems'
 require 'eventmachine'
 require 'yaml'
 require 'logger'

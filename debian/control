@@ -1,0 +1,15 @@
+Source: eatmysoul
+Section: network
+Priority: extra
+Maintainer: elthariel <ballet_j@epitech.eu>
+Build-Depends: debhelper (>= 8.0.0)
+Standards-Version: 3.9.2
+Homepage: http://github.com/elthariel/eatmysoul
+Vcs-Git: git://github.com/elthariel/eatmysoul.git
+
+Package: eatmysoul
+Architecture: all
+Depends: ${misc:Depends},ruby,libeventmachine-ruby
+Description: Simple chatless ruby netsoul client
+ Simple chatless ruby netsoul client
+

@@ -36,4 +36,4 @@ clean:
 	echo "Nothing to clean"
 
 debian:
-	git-buildpackage  --git-upstream-branch=master --git-debian-branch=debian
+	git-buildpackage  --git-upstream-tree=branch --git-ingore-new

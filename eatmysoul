@@ -204,7 +204,7 @@ class Netsoul < EM::Connection
 
   def ns_encode(s)
     str = s.gsub("\n", "\\n")
-    str.gsub!(/[^a-zA-Z0-9_.\-\\]/) {|s| "%%%02X" % s.ord }
+    str.gsub!(/[^a-zA-Z0-9_.\-\\]/) {|s| "%%%02X" % s[0] }
     str.gsub!(' ', '+')
     str
   end

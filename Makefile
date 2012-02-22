@@ -33,4 +33,7 @@ intall:
 	install -m 755 eatmysoul $(DESTDIR)/usr/bin
 
 clean:
-	echo "Nothing to clean:
+	echo "Nothing to clean"
+
+debian:
+	git-buildpackage  --git-upstream-branch=master --git-debian-branch=debian

@@ -11,5 +11,6 @@ Package: eatmysoul
 Architecture: all
 Depends: ${misc:Depends},ruby,libeventmachine-ruby
 Description: Simple chatless ruby netsoul client
- Simple chatless ruby netsoul client
+ This netsoul client (will) focus on reliability and
+ resistance of network errors and server crashes.
 

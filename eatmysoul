@@ -39,10 +39,12 @@ require 'logger'
 require 'digest/md5'
 
 $active_connection = nil
+$monitor = nil
 
 class Settings
   # edit the next line to change the default path
   def initialize(path = "#{ENV['HOME']}/.eatmysoul.yml")
+    path = "/etc/eatmysoul.yml" if `id` =~ /root/
     @options = {
       :server => "ns-server.epita.fr",
       :port => 4242,
@@ -141,6 +143,11 @@ class Netsoul < EM::Connection
     end
   end
 
+  def unbind
+    $active_connection = nil
+    EM.add_timer(5) { EM.connect @o.server, @o.port, Netsoul, @o }
+  end
+
   private
 
   def auth_start(connect_seed)
@@ -202,11 +209,12 @@ class Netsoul < EM::Connection
     str.gsub!(' ', '+')
     str
   end
+
 end
 
 def run(o)
   EM.run do
-    EM::add_periodic_timer(5) { monitor o }
+    $monitor = EM::add_periodic_timer(5) { monitor o } unless $monitor
     EM.connect o.server, o.port, Netsoul, o
   end
 end
@@ -219,20 +227,19 @@ def connect_loop(o)
       run(o)
     rescue => e
       o.logger.fatal "Rescued from exception #{e}"
-      o.logger.debug e.backtrace
+      o.logger.debug e.backtrace.join "\n"
     end
 
     sleep sleep_time
-    sleep_time += 5 if sleep_time < 120
+    sleep_time = sleep_time + 5 if sleep_time < 120
   end
 end
 
 def monitor(o)
   if $active_connection
-    if ($active_connection.last_ping - Time.now) > 700
+    if (Time.now - $active_connection.last_ping) > 120
       o.logger.warn "Connection seems inactive, restarting ..."
-      EM::stop_event_loop
-      connect_loop o
+      $active_connection.close_connection
     end
   end
 end

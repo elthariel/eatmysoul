@@ -237,7 +237,7 @@ end
 
 def monitor(o)
   if $active_connection
-    if (Time.now - $active_connection.last_ping) > 120
+    if (Time.now - $active_connection.last_ping) > 700
       o.logger.warn "Connection seems inactive, restarting ..."
       $active_connection.close_connection
     end

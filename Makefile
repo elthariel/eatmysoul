@@ -30,7 +30,7 @@ eatmysoul:
 
 install:
 	install -d $(DESTDIR)/usr/bin
-	install -d /etc
+	install -d $(DESTDIR)/etc
 	install -m 755 eatmysoul $(DESTDIR)/usr/bin
 	install -m 600 eatmysoul.yml $(DESTDIR)/etc
 

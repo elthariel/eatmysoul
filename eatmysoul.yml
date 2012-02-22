@@ -1,0 +1,10 @@
+---
+:server: ns-server.epita.fr
+:port: 4242
+:daemon: yes
+:login: login_x
+:passwd: pwd_socks
+:logfile: STDOUT
+:loglevel: WARN
+:location: debian-base machine
+:status: chatless client

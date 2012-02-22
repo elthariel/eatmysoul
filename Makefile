@@ -28,7 +28,7 @@ all: eatmysoul
 eatmysoul:
 	echo "Ruby program, nothing to build"
 
-intall:
+install:
 	install -d $(DESTDIR)/usr/bin
 	install -m 755 eatmysoul $(DESTDIR)/usr/bin
 

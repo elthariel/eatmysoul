@@ -31,11 +31,11 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-require 'rubygems'
 require 'eventmachine'
 require 'yaml'
 require 'logger'
 require 'digest/md5'
+require 'trollop'
 
 module EatMySoul
   @@active_connection = nil

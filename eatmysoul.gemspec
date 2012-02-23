@@ -8,10 +8,10 @@ Gem::Specification.new do |s|
   s.authors     = ["Julien 'Lta' BALLET"]
   s.email       = ["ballet_j@epitech.eu"]
   s.homepage    = "http://github.com/elthariel/eatmysoul"
-  s.summary     = "Simple chatless netsoul client"2
+  s.summary     = "Simple chatless netsoul client"
   s.description = "A simple netsoul (epitech's internal network protocol) client, mainly targeting servers"
 
-  #s.rubyforge_project = "eatmysoul"
+  s.rubyforge_project = "eatmysoul"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

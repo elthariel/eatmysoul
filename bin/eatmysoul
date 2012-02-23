@@ -34,7 +34,16 @@
 require 'daemons'
 require 'eatmysoul'
 
-Daemons.run_proc ('eatmysoul') do
+daemon_options = {
+  :app_name   => "eatmysoul",
+  :dir_mode   => (if File.writable?('/var/run') then :system else :script end),
+  :dir        => '.',
+  :multiple   => false,
+  :backtrace  => true,
+  :monitor    => true
+}
+
+Daemons.run_proc('eatmysoul', daemon_options) do
   o = EatMySoul::Settings.new
   Signal.trap("PIPE") { EatMySoul.connect_loop o }
   EatMySoul.connect_loop(o)

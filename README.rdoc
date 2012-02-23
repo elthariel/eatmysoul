@@ -24,7 +24,7 @@ client, but i was wanting to implement one for some times, so i did.
 
 == Usage
 
- rubyxxx eatmysoul.rb [config_file]
+ eatmysoul [run|start|stop] -- [--config-file=/path] [--login=login_x] [--location==loc]
 
 * Run it once (e.g. ruby1.8 eatmysoul.rb), and it will produce a template configuration file (defaults to '~/.eatmysoul.yml')
 * Edit this file. (especially the login and password)

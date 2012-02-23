@@ -31,11 +31,12 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+require 'daemons'
 require 'eatmysoul'
 
-o = EatMySoul::Settings.new
-
-Process.daemon if o.daemon == "true" or o.daemon == "yes"
-Signal.trap("PIPE") { EatMySoul.connect_loop o }
-EatMySoul.connect_loop(o)
+Daemons.run_proc ('eatmysoul') do
+  o = EatMySoul::Settings.new
+  Signal.trap("PIPE") { EatMySoul.connect_loop o }
+  EatMySoul.connect_loop(o)
+end
 

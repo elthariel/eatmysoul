@@ -48,7 +48,6 @@ module EatMySoul
         @options = {
           :server => "ns-server.epita.fr",
           :port => 4242,
-          :daemon => false,
           :login => "login_x",
           :passwd => "pwd_socks",
           :logfile => "STDOUT",

@@ -1,0 +1,6 @@
+# Todo file for eatmysoul
+
+ * Integrate trollop in a way that respect configuration options precedence : CLI > config file > defaults
+ * Use the daemon gem to handle daemonization in a 1.8.x compatible way
+ * Implement an install mode, which can install eatmysoul on linux server (init scripts and stuffs)
+

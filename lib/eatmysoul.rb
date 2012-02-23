@@ -43,25 +43,34 @@ module EatMySoul
 
   class Settings
     # edit the next line to change the default path
-    def initialize(path = "#{ENV['HOME']}/.eatmysoul.yml")
-      path = "/etc/eatmysoul.yml" if `id` =~ /root/
-      @options = {
-        :server => "ns-server.epita.fr",
-        :port => 4242,
-        :daemon => false,
-        :login => "login_x",
-        :passwd => "pwd_socks",
-        :logfile => "STDOUT",
-        :loglevel => "WARN",
-        :location => "somewhere",
-        :status => "chatless client"
-      }
-
+    def initialize()
       begin
+        @options = {
+          :server => "ns-server.epita.fr",
+          :port => 4242,
+          :daemon => false,
+          :login => "login_x",
+          :passwd => "pwd_socks",
+          :logfile => "STDOUT",
+          :loglevel => "WARN",
+          :location => "somewhere",
+          :status => "chatless client"
+        }
+
+        parser = Trollop::Parser.new
+        parser.opt(:config_file, "Configuration file path",
+                   :default => (if `id` =~ /root/ then "/etc/eatmysoul.yml"
+                                else "#{ENV['HOME']}/.eatmysoul.yml" end))
+        @options.each { |k,v| parser.opt(k, k.to_s, :type => :string) }
+        cli_opts = parser.parse.delete_if { |k,v| not v or k =~ /_given/ }
+        puts cli_opts
+        path = cli_opts.delete :config_file
+
         if File.exists? path
           yaml = YAML::load_file(path)
           @options.merge! yaml
         end
+        @options.merge! cli_opts
 
         save path
 

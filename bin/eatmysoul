@@ -33,8 +33,7 @@
 
 require 'eatmysoul'
 
-o = EatMySoul::Settings.new ARGV[0] if ARGV.length >= 1
-o = EatMySoul::Settings.new unless ARGV.length >= 1
+o = EatMySoul::Settings.new
 
 Process.daemon if o.daemon == "true" or o.daemon == "yes"
 Signal.trap("PIPE") { EatMySoul.connect_loop o }

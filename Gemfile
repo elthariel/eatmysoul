@@ -1,3 +1,4 @@
-source 'htttp://rubygems.org'
+source "http://rubygems.org"
 
-gem "eventmachine"
+# Specify your gem's dependencies in eatmysoul.gemspec
+gemspec

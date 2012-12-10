@@ -32,15 +32,13 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 require 'eventmachine'
+require 'singleton'
 require 'yaml'
 require 'logger'
 require 'digest/md5'
 require 'trollop'
 
 module EatMySoul
-  @@active_connection = nil
-  @@monitor = nil
-
   class Settings
     # edit the next line to change the default path
     def initialize()
@@ -133,7 +131,7 @@ module EatMySoul
       @o = settings
       @status = NOT_CONNECTED
       @last_ping = Time.now
-      @@active_connection = self
+      Manager.instance.active_connection = self
     end
 
     def post_init
@@ -157,7 +155,7 @@ module EatMySoul
     end
 
     def unbind
-      @@active_connection = nil
+      Manager.instance.active_connection = nil
       EM.add_timer(5) { EM.connect @o.server, @o.port, Netsoul, @o }
     end
 
@@ -222,40 +220,48 @@ module EatMySoul
       str.gsub!(' ', '+')
       str
     end
+  end # class Netsoul
 
-  end
 
-  def self.run(o)
-    EM.run do
-      @@monitor = EM::add_periodic_timer(5) { self.monitor o } unless @@monitor
-      EM.connect o.server, o.port, Netsoul, o
-    end
-  end
+  class Manager
+    include Singleton
+    attr_accessor :active_connection, :monitor_timer
 
-  def self.connect_loop(o)
-    while true do
-      sleep_time = 0
-
-      begin
-        self.run(o)
-      rescue => e
-        o.logger.fatal "Rescued from exception #{e}"
-        o.logger.debug e.backtrace.join "\n"
-      end
-
-      sleep sleep_time
-      sleep_time = sleep_time + 5 if sleep_time < 120
-    end
-  end
-
-  def self.monitor(o)
-    if @@active_connection
-      if (Time.now - @@active_connection.last_ping) > 700
-        o.logger.warn "Connection seems inactive, restarting ..."
-        @@active_connection.close_connection
+    def run(o)
+      EM.run do
+        monitor_timer = EM::add_periodic_timer(1) { monitor o } unless monitor_timer
+        EM.connect o.server, o.port, Netsoul, o
       end
     end
-  end
 
-end
+    def connect_loop(o)
+      while true do
+        sleep_time = 0
+
+        begin
+          self.run(o)
+        rescue => e
+          o.logger.fatal "Rescued from exception #{e}"
+          o.logger.debug e.backtrace.join "\n"
+        end
+
+        sleep sleep_time
+        sleep_time = sleep_time + 5 if sleep_time < 120
+      end
+    end
+
+    def monitor(o)
+      if active_connection
+        o.logger.debug "Checking for connection inactivity"
+        if (Time.now - active_connection.last_ping) > 650
+          o.logger.warn "Connection seems inactive, restarting ..."
+          active_connection.close_connection
+        end
+      end
+    end
+
+  end # class Manager
+
+
+end # module EatmySoul
 

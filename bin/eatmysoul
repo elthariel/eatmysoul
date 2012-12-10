@@ -32,7 +32,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 require 'daemons'
-require 'eatmysoul'
+load 'lib/eatmysoul.rb'
 
 daemon_options = {
   :app_name   => "eatmysoul",
@@ -46,6 +46,6 @@ daemon_options = {
 Daemons.run_proc('eatmysoul', daemon_options) do
   o = EatMySoul::Settings.new
   Signal.trap("PIPE") { EatMySoul.connect_loop o }
-  EatMySoul.connect_loop(o)
+  EatMySoul::Manager.instance.connect_loop(o)
 end
 

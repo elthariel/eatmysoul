@@ -1,10 +1,18 @@
-GEM
-  remote: htttp://rubygems.org/
+PATH
+  remote: .
   specs:
-    eventmachine (0.12.10)
+    eatmysoul (0.1.1)
+      daemons
+      eventmachine
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    daemons (1.1.9)
+    eventmachine (1.0.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  eventmachine
+  eatmysoul!
